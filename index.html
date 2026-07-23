@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indexus — Human 2 Human Prospection</title>
+<meta name="description" content="Prospección estratégica en LinkedIn, gestionada por personas reales y potenciada por inteligencia artificial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul: #1E3AE8;
+    --azul-oscuro: #101650;
+    --azul-tinta: #0B0E3D;
+    --grafito: #14141A;
+    --gris: #5A5F6B;
+    --gris-linea: #E4E6EC;
+    --hueso: #F4F5F8;
+    --blanco: #FFFFFF;
+    --verde-activo: #2EC46D;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Inter', Arial, sans-serif;
+    color:var(--grafito);
+    background:var(--blanco);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:'Poppins', sans-serif; letter-spacing:-0.02em; }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--gris-linea);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:76px; }
+  .nav-logo svg{ height:26px; width:auto; }
+  .nav-cta{
+    background:var(--grafito); color:var(--blanco); font-weight:600; font-size:13.5px;
+    padding:11px 22px; border-radius:100px; text-decoration:none;
+    transition:background .2s ease;
+  }
+  .nav-cta:hover{ background:var(--azul); }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding:88px 0 64px 0; background:var(--blanco); }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--azul); margin-bottom:22px;
+  }
+  .eyebrow .status-dot{
+    width:8px; height:8px; border-radius:50%; background:var(--verde-activo);
+    box-shadow:0 0 0 3px rgba(46,196,109,0.18);
+  }
+  .hero h1{
+    font-size:52px; font-weight:800; line-height:1.06; color:var(--grafito);
+    margin-bottom:22px;
+  }
+  .hero h1 em{ font-style:normal; color:var(--azul); }
+  .hero p.lead{
+    font-size:17px; color:var(--gris); max-width:460px; margin-bottom:32px;
+  }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary{
+    background:var(--azul); color:var(--blanco); font-weight:600; font-size:14.5px;
+    padding:15px 28px; border-radius:100px; text-decoration:none; display:inline-block;
+    transition:transform .15s ease, box-shadow .15s ease;
+    box-shadow:0 8px 20px rgba(30,58,232,0.25);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-ghost{
+    border:1.5px solid var(--gris-linea); color:var(--grafito); font-weight:600; font-size:14.5px;
+    padding:14px 26px; border-radius:100px; text-decoration:none; display:inline-block;
+  }
+
+  /* ---------- CHAT MOCK (hero signature element) ---------- */
+  .chat-mock{
+    background:var(--hueso); border-radius:20px; padding:26px;
+    border:1px solid var(--gris-linea);
+  }
+  .chat-label{
+    font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--gris); margin-bottom:14px; display:flex; justify-content:space-between;
+  }
+  .bubble-row{ display:flex; margin-bottom:12px; }
+  .bubble{
+    max-width:78%; padding:13px 16px; border-radius:16px; font-size:13.5px; line-height:1.45;
+  }
+  .bubble.bot{
+    background:var(--blanco); border:1px dashed #C7CAD4; color:#9A9EA9;
+    border-bottom-left-radius:4px; position:relative;
+  }
+  .bubble.bot::after{
+    content:"plantilla genérica"; position:absolute; bottom:-19px; left:2px;
+    font-size:10px; color:#B3B6C0; font-style:italic;
+  }
+  .bubble.human{
+    background:var(--azul); color:var(--blanco); margin-left:auto;
+    border-bottom-right-radius:4px;
+  }
+  .bubble-row.human-row{ margin-top:26px; }
+  .typing-indicator{
+    display:inline-flex; gap:4px; align-items:center; margin-top:14px; margin-left:2px;
+  }
+  .typing-indicator span{
+    width:6px; height:6px; border-radius:50%; background:var(--azul); opacity:0.4;
+    animation:blink 1.2s infinite ease-in-out;
+  }
+  .typing-indicator span:nth-child(2){ animation-delay:0.2s; }
+  .typing-indicator span:nth-child(3){ animation-delay:0.4s; }
+  @keyframes blink{ 0%,80%,100%{ opacity:0.25; } 40%{ opacity:1; } }
+  .chat-footnote{ font-size:11.5px; color:var(--gris); margin-top:20px; padding-top:16px; border-top:1px solid var(--gris-linea); }
+
+  @media (prefers-reduced-motion: reduce){
+    .typing-indicator span{ animation:none; opacity:0.7; }
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:80px 0; }
+  .section-label{
+    font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--azul); margin-bottom:12px;
+  }
+  .section-title{ font-size:32px; font-weight:800; margin-bottom:16px; max-width:620px; }
+  .section-sub{ font-size:15.5px; color:var(--gris); max-width:560px; margin-bottom:44px; }
+
+  /* ---------- PROBLEMA ---------- */
+  .problema{ background:var(--hueso); }
+  .problema-grid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; }
+  .problema-grid p{ font-size:16px; color:var(--gris); }
+  .problema-grid p + p{ margin-top:16px; }
+  .stat-block{
+    background:var(--blanco); border-radius:16px; padding:28px; border:1px solid var(--gris-linea);
+  }
+  .stat-block .big{
+    font-family:'Poppins', sans-serif; font-size:38px; font-weight:800; color:var(--azul);
+    line-height:1;
+  }
+  .stat-block .label{ font-size:13px; color:var(--gris); margin-top:8px; }
+  .stat-block + .stat-block{ margin-top:16px; }
+
+  /* ---------- METODO ---------- */
+  .pilares{ display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; }
+  .pilar-card{
+    border:1px solid var(--gris-linea); border-radius:16px; padding:30px 26px;
+    transition:border-color .2s ease;
+  }
+  .pilar-card:hover{ border-color:var(--azul); }
+  .pilar-icon{
+    width:40px; height:40px; border-radius:10px; background:var(--azul);
+    display:flex; align-items:center; justify-content:center; margin-bottom:20px;
+  }
+  .pilar-icon svg{ width:20px; height:20px; }
+  .pilar-card h3{ font-size:17px; margin-bottom:10px; }
+  .pilar-card p{ font-size:14px; color:var(--gris); }
+
+  /* ---------- PLANES ---------- */
+  .planes{ background:var(--azul-tinta); color:var(--blanco); }
+  .planes .section-label{ color:#8FA0FF; }
+  .planes .section-title{ color:var(--blanco); }
+  .planes .section-sub{ color:#B7BEE8; }
+  .tiers{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+  .tier-card{
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12);
+    border-radius:18px; padding:30px 26px; display:flex; flex-direction:column;
+  }
+  .tier-card.featured{
+    background:var(--blanco); color:var(--grafito); border:none;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  }
+  .tier-card.featured .tier-price span{ color:var(--gris); }
+  .tier-card.featured ul li{ color:var(--grafito); border-top-color:var(--gris-linea); }
+  .tier-tag{
+    font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    color:#8FA0FF; margin-bottom:8px;
+  }
+  .tier-card.featured .tier-tag{ color:var(--azul); }
+  .tier-name{ font-size:19px; font-weight:700; margin-bottom:6px; font-family:'Poppins',sans-serif;}
+  .tier-price{ font-size:28px; font-weight:800; font-family:'Poppins',sans-serif; margin-bottom:2px; }
+  .tier-price span{ font-size:12.5px; font-weight:400; color:#B7BEE8; }
+  .tier-note{ font-size:12px; color:#9BA4D6; margin-bottom:20px; }
+  .tier-card.featured .tier-note{ color:var(--gris); }
+  .tier-card ul{ list-style:none; flex-grow:1; }
+  .tier-card li{
+    font-size:13.5px; padding:9px 0 9px 18px; position:relative; color:#DDE1F7;
+    border-top:1px solid rgba(255,255,255,0.1); line-height:1.4;
+  }
+  .tier-card li:first-child{ border-top:none; }
+  .tier-card li::before{ content:"—"; position:absolute; left:0; color:#8FA0FF; }
+  .tier-card.featured li::before{ color:var(--azul); }
+  .tier-cta{
+    margin-top:22px; text-align:center; padding:12px; border-radius:100px;
+    border:1px solid rgba(255,255,255,0.25); font-size:13.5px; font-weight:600;
+    text-decoration:none; color:var(--blanco);
+  }
+  .tier-card.featured .tier-cta{ background:var(--azul); color:var(--blanco); border:none; }
+
+  /* ---------- CONDICIONES ---------- */
+  .condiciones-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+  .condicion{ padding:24px 0; border-top:2px solid var(--grafito); }
+  .condicion h4{ font-size:15px; margin-bottom:8px; font-family:'Poppins',sans-serif; }
+  .condicion p{ font-size:13.5px; color:var(--gris); }
+
+  /* ---------- CTA FINAL ---------- */
+  .cta-final{ background:var(--hueso); text-align:center; }
+  .cta-final h2{ font-size:34px; font-weight:800; margin-bottom:14px; }
+  .cta-final p{ font-size:15.5px; color:var(--gris); max-width:460px; margin:0 auto 30px auto; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:40px 0; border-top:1px solid var(--gris-linea); }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  footer .foot-logo svg{ height:20px; width:auto; }
+  footer .foot-meta{ font-size:12.5px; color:var(--gris); }
+  footer .foot-links{ display:flex; gap:20px; font-size:13px; }
+  footer .foot-links a{ text-decoration:none; color:var(--gris); }
+  footer .foot-links a:hover{ color:var(--azul); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero h1{ font-size:38px; }
+    .problema-grid{ grid-template-columns:1fr; }
+    .pilares{ grid-template-columns:1fr; }
+    .tiers{ grid-template-columns:1fr; }
+    .condiciones-grid{ grid-template-columns:1fr; }
+    section{ padding:56px 0; }
+    footer .wrap{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-logo">
+      <svg viewBox="0 0 445 130" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(24,96)" fill="#1E3AE8">
+        <path d="M46 708Q46 748 74.5 774.5Q103 801 148 801Q192 801 220.5 774.5Q249 748 249 708Q249 669 220.5 642.5Q192 616 148 616Q103 616 74.5 642.5Q46 669 46 708ZM233 558V0H62V558Z" transform="translate(0.00,0) scale(0.09000,-0.09000)"/>
+        <path d="M617 326V0H447V303Q447 359 418.0 390.0Q389 421 340 421Q291 421 262.0 390.0Q233 359 233 303V0H62V558H233V484Q259 521 303.0 542.5Q347 564 402 564Q500 564 558.5 500.5Q617 437 617 326Z" transform="translate(26.55,0) scale(0.09000,-0.09000)"/>
+        <path d="M274 566Q329 566 374.5 543.0Q420 520 446 481V740H617V0H446V80Q422 40 377.5 16.0Q333 -8 274 -8Q205 -8 149.0 27.5Q93 63 60.5 128.5Q28 194 28 280Q28 366 60.5 431.0Q93 496 149.0 531.0Q205 566 274 566ZM324 417Q273 417 237.5 380.5Q202 344 202 280Q202 216 237.5 178.5Q273 141 324 141Q375 141 410.5 178.0Q446 215 446 279Q446 343 410.5 380.0Q375 417 324 417Z" transform="translate(87.21,0) scale(0.09000,-0.09000)"/>
+        <path d="M585 238H198Q202 186 231.5 158.5Q261 131 304 131Q368 131 393 185H575Q561 130 524.5 86.0Q488 42 433.0 17.0Q378 -8 310 -8Q228 -8 164.0 27.0Q100 62 64.0 127.0Q28 192 28 279Q28 366 63.5 431.0Q99 496 163.0 531.0Q227 566 310 566Q391 566 454.0 532.0Q517 498 552.5 435.0Q588 372 588 288Q588 264 585 238ZM413 333Q413 377 383.0 403.0Q353 429 308 429Q265 429 235.5 404.0Q206 379 199 333Z" transform="translate(148.32,0) scale(0.09000,-0.09000)"/>
+        <path d="M392 0 285 155 195 0H10L194 285L5 558H197L304 404L394 558H579L392 277L584 0Z" transform="translate(203.76,0) scale(0.09000,-0.09000)"/>
+        <path d="M613 558V0H442V76Q416 39 371.5 16.5Q327 -6 273 -6Q209 -6 160.0 22.5Q111 51 84.0 105.0Q57 159 57 232V558H227V255Q227 199 256.0 168.0Q285 137 334 137Q384 137 413.0 168.0Q442 199 442 255V558Z" transform="translate(256.68,0) scale(0.09000,-0.09000)"/>
+        <path d="M32 183H201Q204 154 228.0 136.0Q252 118 287 118Q319 118 336.5 130.5Q354 143 354 163Q354 187 329.0 198.5Q304 210 248 224Q188 238 148.0 253.5Q108 269 79.0 302.5Q50 336 50 393Q50 441 76.5 480.5Q103 520 154.5 543.0Q206 566 277 566Q382 566 442.5 514.0Q503 462 512 376H354Q350 405 328.5 422.0Q307 439 272 439Q242 439 226.0 427.5Q210 416 210 396Q210 372 235.5 360.0Q261 348 315 336Q377 320 416.0 304.5Q455 289 484.5 254.5Q514 220 515 162Q515 113 487.5 74.5Q460 36 408.5 14.0Q357 -8 289 -8Q216 -8 159.0 17.0Q102 42 69.0 85.5Q36 129 32 183Z" transform="translate(317.34,0) scale(0.09000,-0.09000)"/>
+        </g>
+        <circle cx="425.56" cy="34" r="9" fill="#1E3AE8"/>
+      </svg>
+    </div>
+    <a class="nav-cta" href="#contacto">Agendar llamada</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="status-dot"></span> Human 2 Human Prospection</div>
+      <h1>Tu LinkedIn, gestionado por <em>personas reales</em>, no por plantillas.</h1>
+      <p class="lead">Indexus convierte tu perfil de LinkedIn en un canal de prospección serio: research con IA, conversación humana y reuniones calificadas en tu agenda — no mensajes masivos que tus prospectos ignoran.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#contacto">Agendar llamada</a>
+        <a class="btn-ghost" href="#planes">Ver planes</a>
+      </div>
+    </div>
+    <div class="chat-mock">
+      <div class="chat-label"><span>Lo que reciben tus prospectos</span></div>
+      <div class="bubble-row">
+        <div class="bubble bot">Hola! Vi tu perfil y me encantaría conectar. ¿Tienes 15 min esta semana para una demo rápida?</div>
+      </div>
+      <div class="bubble-row human-row">
+        <div class="bubble human">Hola Mariana — vi que acaban de anunciar la ronda de expansión a Querétaro. Justo trabajamos con empresas en ese momento de crecimiento. ¿Te late que platiquemos 15 min?</div>
+      </div>
+      <div class="typing-indicator"><span></span><span></span><span></span></div>
+      <div class="chat-footnote">Mensaje real, con research previo, redactado por tu gestor de cuenta — no por un bot en automático.</div>
+    </div>
+  </div>
+</section>
+
+<section class="problema">
+  <div class="wrap">
+    <div class="section-label">El problema</div>
+    <h2 class="section-title">LinkedIn está saturado de mensajes que nadie contesta</h2>
+    <div class="problema-grid">
+      <div>
+        <p>La mayoría de las agencias de prospección envían el mismo mensaje genérico a miles de perfiles. Los tomadores de decisión lo detectan en segundos y lo ignoran.</p>
+        <p>Indexus nació en 2020 con una premisa distinta, y sigue vigente hoy: la prospección funciona cuando se siente humana, aunque esté potenciada por tecnología. Cada conversación la lleva una persona — la IA solo hace el research que antes tomaba horas.</p>
+      </div>
+      <div>
+        <div class="stat-block">
+          <div class="big">0</div>
+          <div class="label">mensajes en automático sin research previo por contacto</div>
+        </div>
+        <div class="stat-block">
+          <div class="big">1:1</div>
+          <div class="label">conversación real gestionada por tu cuenta, no por un flujo genérico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="metodo">
+  <div class="wrap">
+    <div class="section-label">Nuestro método</div>
+    <h2 class="section-title">Tres pilares que no cambian</h2>
+    <p class="section-sub">La tecnología evoluciona; el principio se mantiene desde el primer día de Indexus.</p>
+    <div class="pilares">
+      <div class="pilar-card">
+        <div class="pilar-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Research con IA</h3>
+        <p>Antes de escribir un mensaje, identificamos disparadores reales: cambios de puesto, funding, actividad reciente del prospecto.</p>
+      </div>
+      <div class="pilar-card">
+        <div class="pilar-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H20M4 12H20M4 18H14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Conversación humana</h3>
+        <p>Cada respuesta la gestiona una persona, no un bot. Objeciones, seguimiento y agenda de reuniones con criterio real.</p>
+      </div>
+      <div class="pilar-card">
+        <div class="pilar-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20V10M12 20V4M20 20V14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Visibilidad total</h3>
+        <p>Dashboard en tiempo real de tu pipeline: quién respondió, en qué etapa está, y qué reuniones se agendaron.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="planes" id="planes">
+  <div class="wrap">
+    <div class="section-label">Planes</div>
+    <h2 class="section-title">Elige el nivel de intensidad que necesita tu embudo</h2>
+    <p class="section-sub">Un solo modelo: fee mensual por perfil gestionado. Sin contratos confusos, sin letras chiquitas.</p>
+    <div class="tiers">
+
+      <div class="tier-card">
+        <div class="tier-tag">Esencial</div>
+        <div class="tier-name">Para validar el canal</div>
+        <div class="tier-price">$8,500<span> MXN / mes</span></div>
+        <div class="tier-note">+ Sales Navigator a cargo del cliente</div>
+        <ul>
+          <li>Gestión de 1 perfil de LinkedIn</li>
+          <li>1 campaña activa de prospección</li>
+          <li>Research con IA por prospecto</li>
+          <li>Agenda de reuniones calificadas</li>
+          <li>Reporte mensual de resultados</li>
+        </ul>
+        <a class="tier-cta" href="#contacto">Empezar aquí</a>
+      </div>
+
+      <div class="tier-card featured">
+        <div class="tier-tag">Growth</div>
+        <div class="tier-name">Para ciclos de venta largos</div>
+        <div class="tier-price">$13,500<span> MXN / mes</span></div>
+        <div class="tier-note">+ Sales Navigator a cargo del cliente</div>
+        <ul>
+          <li>Todo lo incluido en Esencial</li>
+          <li>Research profundo por IA (disparadores avanzados)</li>
+          <li>Multicanal: LinkedIn + email de refuerzo</li>
+          <li>Dashboard de pipeline en tiempo real</li>
+          <li>Gestión estructurada de objeciones</li>
+        </ul>
+        <a class="tier-cta" href="#contacto">Empezar aquí</a>
+      </div>
+
+      <div class="tier-card">
+        <div class="tier-tag">Premium</div>
+        <div class="tier-name">Para ventas consultivas</div>
+        <div class="tier-price">$19,500<span> MXN / mes</span></div>
+        <div class="tier-note">+ Sales Navigator a cargo del cliente</div>
+        <ul>
+          <li>Todo lo incluido en Growth</li>
+          <li>Video personalizado en la secuencia</li>
+          <li>Multicanal completo + WhatsApp</li>
+          <li>Hasta 2 perfiles o campañas</li>
+          <li>Sesión mensual de estrategia 1:1</li>
+        </ul>
+        <a class="tier-cta" href="#contacto">Empezar aquí</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-label">Condiciones</div>
+    <h2 class="section-title">Cómo arrancamos</h2>
+    <div class="condiciones-grid">
+      <div class="condicion">
+        <h4>Setup inicial · $4,000 MXN</h4>
+        <p>Pago único. Optimización de perfil, configuración de campaña, research del cliente ideal y carga de los primeros 20–30 prospectos.</p>
+      </div>
+      <div class="condicion">
+        <h4>Permanencia mínima · 3 meses</h4>
+        <p>LinkedIn calibra las campañas nuevas en los primeros 30–45 días. Los resultados sólidos se ven a partir del mes 2–3.</p>
+      </div>
+      <div class="condicion">
+        <h4>Pago adelantado</h4>
+        <p>Al liquidar los 3 meses mínimos por adelantado, se aplica un descuento preferencial. Pregunta por las condiciones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="contacto">
+  <div class="wrap">
+    <h2>¿Listos para reactivar tu prospección?</h2>
+    <p>Agenda una llamada de 20 minutos y definimos el plan correcto para tu embudo.</p>
+    <a class="btn-primary" href="mailto:hola@indexus.cc">Agendar llamada</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-logo">
+      <svg viewBox="0 0 445 130" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(24,96)" fill="#14141A">
+        <path d="M46 708Q46 748 74.5 774.5Q103 801 148 801Q192 801 220.5 774.5Q249 748 249 708Q249 669 220.5 642.5Q192 616 148 616Q103 616 74.5 642.5Q46 669 46 708ZM233 558V0H62V558Z" transform="translate(0.00,0) scale(0.09000,-0.09000)"/>
+        <path d="M617 326V0H447V303Q447 359 418.0 390.0Q389 421 340 421Q291 421 262.0 390.0Q233 359 233 303V0H62V558H233V484Q259 521 303.0 542.5Q347 564 402 564Q500 564 558.5 500.5Q617 437 617 326Z" transform="translate(26.55,0) scale(0.09000,-0.09000)"/>
+        <path d="M274 566Q329 566 374.5 543.0Q420 520 446 481V740H617V0H446V80Q422 40 377.5 16.0Q333 -8 274 -8Q205 -8 149.0 27.5Q93 63 60.5 128.5Q28 194 28 280Q28 366 60.5 431.0Q93 496 149.0 531.0Q205 566 274 566ZM324 417Q273 417 237.5 380.5Q202 344 202 280Q202 216 237.5 178.5Q273 141 324 141Q375 141 410.5 178.0Q446 215 446 279Q446 343 410.5 380.0Q375 417 324 417Z" transform="translate(87.21,0) scale(0.09000,-0.09000)"/>
+        <path d="M585 238H198Q202 186 231.5 158.5Q261 131 304 131Q368 131 393 185H575Q561 130 524.5 86.0Q488 42 433.0 17.0Q378 -8 310 -8Q228 -8 164.0 27.0Q100 62 64.0 127.0Q28 192 28 279Q28 366 63.5 431.0Q99 496 163.0 531.0Q227 566 310 566Q391 566 454.0 532.0Q517 498 552.5 435.0Q588 372 588 288Q588 264 585 238ZM413 333Q413 377 383.0 403.0Q353 429 308 429Q265 429 235.5 404.0Q206 379 199 333Z" transform="translate(148.32,0) scale(0.09000,-0.09000)"/>
+        <path d="M392 0 285 155 195 0H10L194 285L5 558H197L304 404L394 558H579L392 277L584 0Z" transform="translate(203.76,0) scale(0.09000,-0.09000)"/>
+        <path d="M613 558V0H442V76Q416 39 371.5 16.5Q327 -6 273 -6Q209 -6 160.0 22.5Q111 51 84.0 105.0Q57 159 57 232V558H227V255Q227 199 256.0 168.0Q285 137 334 137Q384 137 413.0 168.0Q442 199 442 255V558Z" transform="translate(256.68,0) scale(0.09000,-0.09000)"/>
+        <path d="M32 183H201Q204 154 228.0 136.0Q252 118 287 118Q319 118 336.5 130.5Q354 143 354 163Q354 187 329.0 198.5Q304 210 248 224Q188 238 148.0 253.5Q108 269 79.0 302.5Q50 336 50 393Q50 441 76.5 480.5Q103 520 154.5 543.0Q206 566 277 566Q382 566 442.5 514.0Q503 462 512 376H354Q350 405 328.5 422.0Q307 439 272 439Q242 439 226.0 427.5Q210 416 210 396Q210 372 235.5 360.0Q261 348 315 336Q377 320 416.0 304.5Q455 289 484.5 254.5Q514 220 515 162Q515 113 487.5 74.5Q460 36 408.5 14.0Q357 -8 289 -8Q216 -8 159.0 17.0Q102 42 69.0 85.5Q36 129 32 183Z" transform="translate(317.34,0) scale(0.09000,-0.09000)"/>
+        </g>
+        <circle cx="425.56" cy="34" r="9" fill="#14141A"/>
+      </svg>
+    </div>
+    <div class="foot-meta">Mérida, Yucatán, México</div>
+    <div class="foot-links">
+      <a href="mailto:hola@indexus.cc">hola@indexus.cc</a>
+      <a href="#contacto">Agendar llamada</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
